@@ -25,18 +25,24 @@
         <property name="password" value="FG_DEMO_IR"/>
     </bean>
 
+
     <int:channel id="queryChannel" />
     <int:channel id="outputChannel" />
     <int:logging-channel-adapter channel="outputChannel" />
-
-    <int-jdbc:inbound-channel-adapter query="SELECT file_content,file_name FROM fg_dms_content WHERE id = '1918'"
+	
+	
+	<!-- 	916 -> xlsx,920 -> csv,961->txt,1699->xls -->
+    <int-jdbc:inbound-channel-adapter query="SELECT file_content,file_name FROM fg_dms_content   WHERE id = '916'"
                                        channel="queryChannel"
                                        data-source="dataSource">
         <int:poller fixed-rate="10000" />
     </int-jdbc:inbound-channel-adapter>
 
+
+
     <int:service-activator input-channel="queryChannel" output-channel="outputChannel"
                            ref="dataProcessor" method="processData"/>
+                           
 
     <int-file:outbound-channel-adapter id="fileOutboundAdapter"
                                        directory="D:/Hari/demo_projects/destination"

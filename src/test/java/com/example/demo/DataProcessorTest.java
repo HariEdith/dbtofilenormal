@@ -10,12 +10,12 @@ import ch.qos.logback.classic.Logger;
 
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
 import static org.mockito.Mockito.*;
+
 
 class DataProcessorTest {
 
@@ -32,7 +32,7 @@ class DataProcessorTest {
 
     @Test
     void testProcessData() throws Exception {
-        // Mock input data
+        
         String fileName = "example.xlsx";
         byte[] fileContent = Base64.getEncoder().encode("Sample file content".getBytes());
         Map<String, Object> payload = new HashMap<>();
@@ -42,15 +42,70 @@ class DataProcessorTest {
         Message<Map<String, Object>> message = mock(Message.class);
         when(message.getPayload()).thenReturn(payload);
 
-        // Call the method
         File outputFile = dataProcessor.processData(message).getPayload();
-
-        // Verify file creation and logger
         verify(logger).info("File copied to: {}", outputFile.getAbsolutePath());
         verifyNoMoreInteractions(logger);
-
-        // Clean up (delete the created file)
+   
         outputFile.delete();
     }
 
+    @Test
+    void testSaveAsCsv() throws IOException {
+        byte[] contentBytes = "Test CSV content".getBytes();
+        String fileName = "testFile";
+      
+        dataProcessor.saveAsCsv(contentBytes, fileName);
+
+        String expectedFilePath = "D:\\Hari\\demo_projects\\destination\\testFile.csv";
+        verify(logger).info("CSV file saved: {}", expectedFilePath);
+        verifyNoMoreInteractions(logger);
+
+       
+        new File(DataProcessor.getDestinationDirectory() + fileName + ".csv").delete();
+    }
+
+
+    @Test
+    void testSaveAsXlsx() throws IOException {
+        byte[] contentBytes = "Test XLSX content".getBytes();
+        String fileName = "testFile";
+       
+        dataProcessor.saveAsXlsx(contentBytes, fileName);
+       
+        String expectedFilePath = "D:\\Hari\\demo_projects\\destination\\testFile.xlsx"; 
+        verify(logger).info("XLSX file saved: {}", expectedFilePath);
+        verifyNoMoreInteractions(logger);
+       
+        new File(DataProcessor.getDestinationDirectory() + fileName + ".xlsx").delete();
+    }
+
+    @Test
+    void testSaveAsXls() throws IOException {
+        byte[] contentBytes = "Test XLS content".getBytes();
+        String fileName = "testFile";
+    
+        dataProcessor.saveAsXls(contentBytes, fileName);
+     
+        String expectedFilePath = "D:\\Hari\\demo_projects\\destination\\testFile.xls";
+        verify(logger).info("XLS file saved: {}", expectedFilePath);
+        verifyNoMoreInteractions(logger);
+
+       
+        new File(DataProcessor.getDestinationDirectory() + fileName + ".xls").delete();
+    }
+
+    @Test
+    void testSaveAsText() throws IOException {
+        byte[] contentBytes = "Test text content".getBytes();
+        String fileName = "testFile";
+       
+        dataProcessor.saveAsText(contentBytes, fileName);
+      
+        String expectedFilePath = "D:\\Hari\\demo_projects\\destination\\testFile.txt"; 
+        verify(logger).info("Text file saved: {}", expectedFilePath);
+        verifyNoMoreInteractions(logger);
+
+       
+        new File(DataProcessor.getDestinationDirectory() + fileName + ".txt").delete();
+    }
 }
