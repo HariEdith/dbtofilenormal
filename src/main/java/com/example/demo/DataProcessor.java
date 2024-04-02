@@ -23,9 +23,25 @@ public class DataProcessor {
     private static final String FILE_CONTENT = "file_content";
     private static final String DESTINATION_DIRECTORY = "D:/Hari/demo_projects/destination/";
 
-    private static final Logger logger = LoggerFactory.getLogger(DataProcessor.class);
+    public static String getFileName() {
+		return FILE_NAME;
+	}
 
-    public Message<File> processData(Message<Map<String, Object>> message) throws IOException {
+	public static String getFileContent() {
+		return FILE_CONTENT;
+	}
+
+	public static String getDestinationDirectory() {
+		return DESTINATION_DIRECTORY;
+	}
+
+	public static Logger getLogger() {
+		return logger;
+	}
+
+	private static final Logger logger = LoggerFactory.getLogger(DataProcessor.class);
+
+    public Message<File> processData(Message<Map<String, Object>> message)  {
         Map<String, Object> payload = message.getPayload();
         byte[] base64Content = (byte[]) payload.get(FILE_CONTENT);
         String fileName = String.valueOf(payload.get(FILE_NAME));
