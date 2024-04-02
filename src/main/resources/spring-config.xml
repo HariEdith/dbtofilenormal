@@ -27,11 +27,12 @@
 
     <int:channel id="queryChannel" />
     <int:channel id="outputChannel" />
+    <int:logging-channel-adapter channel="outputChannel" />
 
     <int-jdbc:inbound-channel-adapter query="SELECT file_content,file_name FROM fg_dms_content WHERE id = '1918'"
                                        channel="queryChannel"
                                        data-source="dataSource">
-        <int:poller fixed-rate="1000" />
+        <int:poller fixed-rate="10000" />
     </int-jdbc:inbound-channel-adapter>
 
     <int:service-activator input-channel="queryChannel" output-channel="outputChannel"
