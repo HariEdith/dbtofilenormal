@@ -18,35 +18,29 @@
     	http://www.springframework.org/schema/integration/ws http://www.springframework.org/schema/integration/ws/spring-integration-ws.xsd">
 
 
-     <bean id="dataSource"
-		class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+     <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName" value="oracle.jdbc.OracleDriver"/>
         <property name="url" value="jdbc:oracle:thin:@192.168.1.49:1521:fin"/>
         <property name="username" value="FG_DEMO_IR"/>
         <property name="password" value="FG_DEMO_IR"/>
     </bean>
 
-
     <int:channel id="queryChannel" />
     <int:channel id="outputChannel" />
 
-  
- <int-jdbc:inbound-channel-adapter query="SELECT file_content,file_name FROM fg_dms_content WHERE id = '961'"
-                                   channel="queryChannel"
-                                   data-source="dataSource">
-    <int:poller fixed-rate="1000" />
-	</int-jdbc:inbound-channel-adapter>
+    <int-jdbc:inbound-channel-adapter query="SELECT file_content,file_name FROM fg_dms_content WHERE id = '1918'"
+                                       channel="queryChannel"
+                                       data-source="dataSource">
+        <int:poller fixed-rate="1000" />
+    </int-jdbc:inbound-channel-adapter>
 
-   
     <int:service-activator input-channel="queryChannel" output-channel="outputChannel"
                            ref="dataProcessor" method="processData"/>
 
-   
- <int-file:outbound-channel-adapter id="fileOutboundAdapter"
-                                   directory="D:/Hari/demo_projects/destination"
-                                   filename-generator-expression="'output_file_' + T(java.lang.System).currentTimeMillis() + '.' + headers['fileformat']" />
+    <int-file:outbound-channel-adapter id="fileOutboundAdapter"
+                                       directory="D:/Hari/demo_projects/destination"
+                                       filename-generator-expression="'output_file_' + T(java.lang.System).currentTimeMillis() + '.' + headers['fileformat']" />
 
- 
     <bean id="dataProcessor" class="com.example.demo.DataProcessor" />
 
 </beans>
