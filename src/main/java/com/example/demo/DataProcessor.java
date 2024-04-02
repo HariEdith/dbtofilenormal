@@ -22,6 +22,7 @@ public class DataProcessor {
     private static final String FILE_NAME = "file_name";
     private static final String FILE_CONTENT = "file_content";
     private static final String DESTINATION_DIRECTORY = "D:/Hari/demo_projects/destination/";
+    private static Logger logger = LoggerFactory.getLogger(DataProcessor.class);
 
     public static String getFileName() {
 		return FILE_NAME;
@@ -38,8 +39,12 @@ public class DataProcessor {
 	public static Logger getLogger() {
 		return logger;
 	}
+	
+	public DataProcessor(Logger logger) {
+        this.logger = logger;
+    }
 
-	private static final Logger logger = LoggerFactory.getLogger(DataProcessor.class);
+	
 
     public Message<File> processData(Message<Map<String, Object>> message)  {
         Map<String, Object> payload = message.getPayload();
@@ -60,7 +65,7 @@ public class DataProcessor {
         return MessageBuilder.withPayload(outputFile).build();
     }
 
-    // Method to save as CSV format
+  
     public void saveAsCsv(byte[] contentBytes, String fileName) throws IOException {
         File csvFile = new File(DESTINATION_DIRECTORY + fileName + ".csv");
         try (FileOutputStream outputStream = new FileOutputStream(csvFile)) {
@@ -69,12 +74,12 @@ public class DataProcessor {
         }
     }
 
-    // Method to save as XLSX format
+    
     public void saveAsXlsx(byte[] contentBytes, String fileName) throws IOException {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Data");
 
-            // Convert contentBytes to a string
+         
             String content = new String(contentBytes, StandardCharsets.UTF_8);
             String[] rows = content.split("\n");
 
@@ -99,7 +104,7 @@ public class DataProcessor {
         }
     }
 
-    // Method to save as XLS format
+
     public void saveAsXls(byte[] contentBytes, String fileName) throws IOException {
         File xlsFile = new File(DESTINATION_DIRECTORY + fileName + ".xls");
         try (FileOutputStream outputStream = new FileOutputStream(xlsFile)) {
@@ -108,7 +113,7 @@ public class DataProcessor {
         }
     }
 
-    // Method to save as text format
+ 
     public void saveAsText(byte[] contentBytes, String fileName) throws IOException {
         File textFile = new File(DESTINATION_DIRECTORY + fileName + ".txt");
         try (FileOutputStream outputStream = new FileOutputStream(textFile)) {
