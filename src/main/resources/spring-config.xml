@@ -32,7 +32,7 @@
 	
 	
 	<!-- 	916 -> xlsx,920 -> csv,961->txt,1699->xls -->
-    <int-jdbc:inbound-channel-adapter query="SELECT file_content,file_name FROM fg_dms_content   WHERE id = '916'"
+    <int-jdbc:inbound-channel-adapter query="SELECT file_content,file_name FROM fg_dms_content   WHERE id = '1699'"
                                        channel="queryChannel"
                                        data-source="dataSource">
         <int:poller fixed-rate="10000" />
