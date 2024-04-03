@@ -32,17 +32,18 @@
 	
 	
 	<!-- 	916 -> xlsx,920 -> csv,961->txt,1699->xls -->
-    <int-jdbc:inbound-channel-adapter query="SELECT file_content,file_name FROM fg_dms_content   WHERE id = '1699'"
-                                       channel="queryChannel"
-                                       data-source="dataSource">
-        <int:poller fixed-rate="10000" />
-    </int-jdbc:inbound-channel-adapter>
+   <int-jdbc:inbound-channel-adapter query="SELECT file_content, file_name FROM fg_dms_content WHERE id IN (916, 920, 961, 1699)"
+                                   channel="queryChannel"
+                                   data-source="dataSource">
+    <int:poller fixed-rate="10000" />
+</int-jdbc:inbound-channel-adapter>
 
+<int:splitter input-channel="queryChannel" output-channel="processChannel" />
 
+<int:service-activator input-channel="processChannel" output-channel="outputChannel"
+                       ref="dataProcessor" method="processData" />
 
-    <int:service-activator input-channel="queryChannel" output-channel="outputChannel"
-                           ref="dataProcessor" method="processData"/>
-                           
+<int:aggregator input-channel="outputChannel" output-channel="resultChannel" />
 
     <int-file:outbound-channel-adapter id="fileOutboundAdapter"
                                        directory="D:/Hari/demo_projects/destination"
