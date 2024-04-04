@@ -23,8 +23,26 @@ public class DataProcessor {
     private static final String FILE_CONTENT = "file_content";
     private static final String DESTINATION_DIRECTORY = "D:/Hari/demo_projects/destination/";
     private static Logger logger = LoggerFactory.getLogger(DataProcessor.class);
-
-
+//
+//    //getter for juint
+//    public static String getFileName() {
+//		return FILE_NAME;
+//	}
+//
+//	public static String getFileContent() {
+//		return FILE_CONTENT;
+//	}
+//
+//	public static String getDestinationDirectory() {
+//		return DESTINATION_DIRECTORY;
+//	}
+//	public static Logger getLogger() {
+//		return logger;
+//	}
+//	//constructor for junit
+//	public  DataProcessor(Logger logger) {
+//      this.logger = logger;
+//	}
 
     public Message<File> processData(Message<Map<String, Object>> message)  {
         Map<String, Object> payload = message.getPayload();
@@ -37,7 +55,7 @@ public class DataProcessor {
 
         try (FileOutputStream outputStream = new FileOutputStream(outputFile)) {
             outputStream.write(decodedBytes);
-            logger.info("File copied to: {}", outputFile.getAbsolutePath());
+           logger.info("File copied to: {}", outputFile.getAbsolutePath());
         } catch (IOException e) {
             logger.error("Error copying file to: {}", outputFile.getAbsolutePath(), e);
         }
@@ -101,4 +119,5 @@ public class DataProcessor {
             logger.info("Text file saved: {}", textFile.getAbsolutePath());
         }
     }
+
 }
